@@ -23,16 +23,20 @@ document.addEventListener("DOMContentLoaded", function() {
         listItem.addEventListener("click", function(e) {
             e.preventDefault();
             showCardSet.innerHTML = ""
-            const name = document.createElement("h2")
+            const name = document.createElement("h1")
             name.innerText = cardSet.name
-            const setId = document.createElement("h3")
+            const setId = document.createElement("h2")
+            setId.innerText = `Set ID: ${cardSet.id}`
+            const logoHeader = document.createElement("h3")
+            logoHeader.innerText = "LOGO:"
             const logo = document.createElement("img")
-            logo.width = 300
-            logo.height = 100
             logo.src = `${cardSet.logo}.png`;
+            const symbolHeader = document.createElement("h3")
+            symbolHeader.innerText = "SYMBOL:"
             const symbol = document.createElement("img")
+            symbol.src = `${cardSet.symbol}.png`;
             const cardData = document.createElement("p")
-            showCardSet.append(name, logo)
+            showCardSet.append(name, setId, logoHeader, logo, symbolHeader, symbol)
 
             logo.addEventListener("error", function(e) {
                 e.target.src = "https://assets.tcgdex.net/en/base/base1/logo.png"
