@@ -18,5 +18,10 @@ document.addEventListener("DOMContentLoaded", function() {
         const listItem = document.createElement("li")
         listItem.innerText = cardSet.name
         list.append(listItem)
+
+        listItem.addEventListener("click", function(e) {
+            e.preventDefault();
+            
+        })
     }
 })
