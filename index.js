@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const list = document.getElementById("list")
     const showCardSet = document.getElementById("show-cardset")
+    const cardUl = document.getElementById("card-list")
 
     function fetchCards() {
         fetch("https://api.tcgdex.net/v2/en/sets")
@@ -9,13 +10,13 @@ document.addEventListener("DOMContentLoaded", function() {
         .then((jsonCardSets) => {
             jsonCardSets.forEach(cardSet => {
                 console.log(cardSet)
-                cardList(cardSet)
+                cardSetList(cardSet)
             })
         })
     }
     fetchCards()
 
-    function cardList(cardSet) {
+    function cardSetList(cardSet) {
         const listItem = document.createElement("li")
         listItem.innerText = cardSet.name
         list.append(listItem)
@@ -36,12 +37,33 @@ document.addEventListener("DOMContentLoaded", function() {
             const symbol = document.createElement("img")
             symbol.src = `${cardSet.symbol}.png`;
             const cardData = document.createElement("p")
-            showCardSet.append(name, setId, logoHeader, logo, symbolHeader, symbol)
+            cardData.innerText = `Total Cards: ${cardSet.cardCount.total} | Official Cards: ${cardSet.cardCount.official}`;
+            showCardSet.append(name, setId, logoHeader, logo, symbolHeader, symbol, cardData)
 
             logo.addEventListener("error", function(e) {
                 e.target.src = "https://assets.tcgdex.net/en/base/base1/logo.png"
                 e.onerror = null
             })
+
+            symbol.addEventListener("error", function(e) {
+                e.target.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Pok%C3%A9_Ball_icon.svg/2052px-Pok%C3%A9_Ball_icon.svg.png"
+                e.onerror = null
+            })
+
+            fetch("https://api.tcgdex.net/v2/en/cards")
+            .then((resp) => resp.json())
+            .then((jsonCardList) => {
+                jsonCardList.forEach(card => {
+                    console.log(card)
+                    cardList(card)
+                })
+            })
         })
+    }
+
+    function cardList(card) {
+        const cardLi = document.createElement("li")
+        cardLi.innerText = card.name
+        cardUl.append(cardLi)
     }
 })
