@@ -24,6 +24,8 @@ document.addEventListener("DOMContentLoaded", function() {
         listItem.addEventListener("click", function(e) {
             e.preventDefault();
             showCardSet.innerHTML = ""
+            const nameHeader = document.createElement("h3")
+            nameHeader.innerText = 'SET NAME:'
             const name = document.createElement("h1")
             name.innerText = cardSet.name
             const setId = document.createElement("h2")
@@ -38,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function() {
             symbol.src = `${cardSet.symbol}.png`;
             const cardData = document.createElement("p")
             cardData.innerText = `Total Cards: ${cardSet.cardCount.total} | Official Cards: ${cardSet.cardCount.official}`;
-            showCardSet.append(name, setId, logoHeader, logo, symbolHeader, symbol, cardData)
+            showCardSet.append(nameHeader, name, setId, logoHeader, logo, symbolHeader, symbol, cardData)
 
             logo.addEventListener("error", function(e) {
                 e.target.src = "https://assets.tcgdex.net/en/base/base1/logo.png"
@@ -58,12 +60,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     cardList(card)
                 })
             })
-        })
-    }
 
-    function cardList(card) {
-        const cardLi = document.createElement("li")
-        cardLi.innerText = card.name
-        cardUl.append(cardLi)
+            function cardList(card) {
+                const cardLi = document.createElement("li")
+                cardLi.innerText = card.name
+                cardUl.append(cardLi)
+            }
+        })
     }
 })
