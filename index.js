@@ -3,18 +3,20 @@ document.addEventListener("DOMContentLoaded", function() {
     const list = document.getElementById("list")
     const showCardSet = document.getElementById("show-cardset")
     const cardUl = document.getElementById("card-list")
+    const cardInfo = document.getElementById("show-card-info")
+    const cardForm = document.getElementById("card-form")
 
-    function fetchCards() {
+    // function fetches card sets and displays on dom
+    function fetchCardSets() {
         fetch("https://api.tcgdex.net/v2/en/sets")
         .then((resp) => resp.json())
         .then((jsonCardSets) => {
             jsonCardSets.forEach(cardSet => {
-                console.log(cardSet)
                 cardSetList(cardSet)
             })
         })
     }
-    fetchCards()
+    fetchCardSets()
 
     function cardSetList(cardSet) {
         const listItem = document.createElement("li")
@@ -51,21 +53,65 @@ document.addEventListener("DOMContentLoaded", function() {
                 e.target.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Pok%C3%A9_Ball_icon.svg/2052px-Pok%C3%A9_Ball_icon.svg.png"
                 e.onerror = null
             })
-
-            fetch("https://api.tcgdex.net/v2/en/cards")
-            .then((resp) => resp.json())
-            .then((jsonCardList) => {
-                jsonCardList.forEach(card => {
-                    console.log(card)
-                    cardList(card)
-                })
-            })
-
-            function cardList(card) {
-                const cardLi = document.createElement("li")
-                cardLi.innerText = card.name
-                cardUl.append(cardLi)
-            }
         })
     }
+
+    // function fetches all cards and displays on dom
+    function fetchCards() {
+        fetch("https://api.tcgdex.net/v2/en/cards")
+        .then((resp) => resp.json())
+        .then((jsonCardList) => {
+            jsonCardList.forEach(card => {
+                cardList(card)
+            })
+        })
+    }
+    fetchCards()
+
+    function cardList(card) {
+        // console.log(card.id, cardSet.id)
+
+        const cardLi = document.createElement("li")
+        cardLi.innerText = card.name
+        cardUl.append(cardLi)
+
+        cardLi.addEventListener("click", function(e) {
+            e.preventDefault();
+            cardInfo.innerHTML = ""
+            const nameHeader = document.createElement("h3")
+            nameHeader.innerText = 'NAME:'
+            const name = document.createElement("h1")
+            name.innerText = card.name
+            const setId = document.createElement("h2")
+            setId.innerText = `Set ID: ${card.id}`
+            const imageHeader = document.createElement("h3")
+            imageHeader.innerText = "CARD:"
+            const image = document.createElement("img")
+            image.src = `${card.image}/high.png`;
+
+
+            cardInfo.append(nameHeader, name, setId, imageHeader, image)
+
+            image.addEventListener("error", function(e) {
+                e.target.src = "https://assets.pokemon.com/assets/cms2/img/cards/web/SM8/SM8_EN_91.png"
+                e.onerror = null
+            })
+        })
+    }
+
+    cardForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        cardSearch(cardForm.children[0].value)
+        console.log(cardForm.children[0].value)
+    })
+
+    function cardSearch(name) {
+        fetch(`https://api.tcgdex.net/v2/en/cards/${name}`)
+            .then(res => res.json())
+            .then(jsonCard => {
+                cardInfo.innerHTML = ""
+                cardUl.innerHTML = ""
+                cardList(jsonCard)
+            })
+    };
 })
