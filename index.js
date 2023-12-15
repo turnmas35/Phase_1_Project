@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    
+
 // global variables
     const list = document.getElementById("list")
     const showCardSet = document.getElementById("show-cardset")
@@ -123,17 +123,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
     cardSetForm.addEventListener("submit", function(e) {
         e.preventDefault();
-        cardSearch(cardSetForm.children[0].value)
+        cardSetSearch(cardSetForm.children[0].value)
         console.log(cardSetForm.children[0].value)
     })
 
-    function cardSearch(name) {
-        fetch(`https://api.tcgdex.net/v2/en/cards/${name}`)
+    function cardSetSearch(name) {
+        fetch(`https://api.tcgdex.net/v2/en/sets/${name}`)
             .then(res => res.json())
-            .then(jsonCard => {
-                cardInfo.innerHTML = ""
-                cardUl.innerHTML = ""
-                cardList(jsonCard)
+            .then(jsonSet => {
+                showCardSet.innerHTML = ""
+                list.innerHTML = ""
+                cardSetList(jsonSet)
             })
     };
 })
